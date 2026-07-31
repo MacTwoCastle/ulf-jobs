@@ -128,6 +128,15 @@
   .vermittler-badge { display: inline-flex; align-items: center; justify-content: center; margin-left: 6px; font-size: 0.7rem; cursor: help; border-bottom: 1px dashed var(--muted); flex-shrink: 0; }
   .vermittler-badge:hover { opacity: 0.75; }
 
+  /* LINK-OFFLINE WARNUNG */
+  .link-warning-badge { display: inline-flex; align-items: center; justify-content: center; margin-left: 6px; font-size: 0.7rem; cursor: help; border-bottom: 1px dashed var(--red); color: var(--red); flex-shrink: 0; }
+  .link-warning-badge:hover { opacity: 0.75; }
+  .herkunft-badge { display: inline-flex; align-items: center; justify-content: center; margin-left: 6px; font-size: 0.7rem; cursor: help; border-bottom: 1px dashed #1565c0; color: #1565c0; flex-shrink: 0; }
+  .herkunft-badge:hover { opacity: 0.75; }
+  .apply-btn-group { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+  .apply-btn-fallback { font-size: 0.7rem; color: var(--muted); text-decoration: none; border-bottom: 1px dashed var(--muted); }
+  .apply-btn-fallback:hover { color: var(--primary); }
+
   .tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; background: #eee; color: #555; margin: 1px; }
   .tag-remote { background: #e8f5e9; color: #2e7d32; }
   .tag-hybrid { background: #fff8e1; color: #f57f17; }
@@ -140,6 +149,20 @@
   .tooltip { position: relative; cursor: help; }
   .tooltip::after { content: attr(data-tip); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 5px 9px; border-radius: 5px; font-size: 0.72rem; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .2s; z-index: 10; }
   .tooltip:hover::after { opacity: 1; }
+
+  /* HERLEITUNG (CV -> Suchprofil -> Recherche) */
+  .herleitung-stage-title { font-size: 1rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .herleitung-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .herleitung-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .herleitung-card h4 { font-size: 0.88rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+  .herleitung-card ul { padding-left: 18px; font-size: 0.82rem; color: var(--text); line-height: 1.7; }
+  .herleitung-arrow { text-align: center; font-size: 1.6rem; color: var(--accent2); margin: 4px 0 18px; }
+  .herleitung-chip { display: inline-flex; align-items: center; gap: 4px; background: #eef3f9; color: var(--primary); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; margin: 3px 4px 3px 0; cursor: pointer; transition: all .15s; }
+  .herleitung-chip:hover { background: var(--primary); color: #fff; }
+  .herleitung-chip-static { cursor: default; }
+  .herleitung-chip-static:hover { background: #eef3f9; color: var(--primary); }
+  .herleitung-begruendung { font-size: 0.78rem; color: var(--muted); margin-top: 10px; font-style: italic; }
+  .herleitung-steps { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 18px 18px 18px 34px; font-size: 0.84rem; line-height: 1.9; }
 </style>
 </head>
 <body>
@@ -160,6 +183,7 @@
   <div class="tab" onclick="switchTab('jobs')">📋 Stellenanzeigen</div>
   <div class="tab" onclick="switchTab('tracker')">🗂 Bewerbungs-Tracker</div>
   <div class="tab" onclick="switchTab('linkedin')">🔗 LinkedIn-Suche</div>
+  <div class="tab" onclick="switchTab('herleitung')">🧭 Herleitung</div>
 </div>
 
 <div class="container">
@@ -299,6 +323,14 @@
         <option value="Executive">🟣 Executive</option>
       </select>
     </div>
+    <div class="filter-group">
+      <label>Herkunft</label>
+      <select id="f-job-herkunft" onchange="filterJobs()">
+        <option value="">Alle</option>
+        <option value="rollenspezifisch">🎯 Zielrolle</option>
+        <option value="abschlussbasiert">🎓 Abschlussbasiert</option>
+      </select>
+    </div>
     <button class="btn btn-outline" onclick="resetJobFilter()">↺ Zurücksetzen</button>
     <button class="btn btn-green" onclick="exportCSV('jobs')">⬇ CSV Export</button>
   </div>
@@ -382,6 +414,37 @@
       <li id="linkedin-tip-companies"></li>
     </ul>
   </div>
+</div>
+
+<!-- ===== TAB: HERLEITUNG ===== -->
+<div id="tab-herleitung" class="tab-content">
+  <div class="info-box">
+    <strong>Wie wurde recherchiert?</strong> Diese Seite zeigt transparent, wie aus dem Lebenslauf (und weiteren Unterlagen) ein individuelles Suchprofil abgeleitet wurde – und wie dieses Suchprofil die Internet-Recherche zu Branchen, Firmen und Stellenanzeigen gesteuert hat.
+  </div>
+
+  <div class="herleitung-stage">
+    <div class="herleitung-stage-title">1️⃣ CV-Kernfakten</div>
+    <div class="herleitung-cards" id="herleitung-cv-cards"></div>
+  </div>
+  <div class="herleitung-arrow">⬇️</div>
+
+  <div class="herleitung-stage">
+    <div class="herleitung-stage-title">2️⃣ Abgeleitetes Suchprofil</div>
+    <div class="herleitung-cards" id="herleitung-suchprofil-cards"></div>
+  </div>
+  <div class="herleitung-arrow">⬇️</div>
+
+  <div class="herleitung-stage">
+    <div class="herleitung-stage-title">3️⃣ Rechercheergebnisse</div>
+    <div class="stats-row" id="herleitung-result-stats"></div>
+    <div class="herleitung-cards" id="herleitung-branchen-cards" style="margin-top:14px;"></div>
+  </div>
+
+  <div style="margin-top:26px;">
+    <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:10px;color:var(--primary);">🔎 Rechercheschritte im Überblick</h3>
+    <ol class="herleitung-steps" id="herleitung-steps-list"></ol>
+  </div>
+  <div id="herleitung-empty" class="no-results" style="display:none;">Für dieses Profil liegt noch keine Herleitung vor.</div>
 </div>
 
 </div><!-- /container -->
@@ -1239,6 +1302,7 @@ const linkedinQueries = [
     "url": "https://www.linkedin.com/jobs/search/?keywords=IT-Leiter+%C3%B6ffentlicher+Dienst+Beh%C3%B6rde&location=Deutschland&f_WT=1%2C2%2C3"
   }
 ];
+const herleitungData = {};
 // ===== END DATA SECTION =====
 
 
@@ -1391,9 +1455,15 @@ function renderJobs(data) {
     const isNew = j.alter_tage <= 3;
     const neu = isNew ? ' <span style="background:#e8f5e9;color:#2e7d32;font-size:0.68rem;font-weight:700;padding:1px 6px;border-radius:10px;">NEU</span>' : '';
     const vermittlerBadge = j.vermittler ? ' <span class="vermittler-badge" title="Vermittelt durch Personalberatung/Headhunter – der tatsächliche Arbeitgeber wird in dieser Anzeige nicht genannt">🕵️ Vermittlung</span>' : '';
+    const linkWarningBadge = j.linkOffline ? ' <span class="link-warning-badge" title="Diese Stellenanzeige konnte beim letzten Check nicht mehr geöffnet werden und ist ggf. bereits offline. Bitte über die Firmen-Karriereseite prüfen, ob die Stelle noch existiert.">⚠️ ggf. offline</span>' : '';
+    const herkunftBadge = j.herkunft === 'abschlussbasiert' ? ' <span class="herkunft-badge" title="Gefunden über eine breite, abschlussbasierte Suche (M.Sc. Maschinenbau o. ä.), nicht über eine der spezialisierten Zielrollen – die fachliche Spezialisierung ist hier weniger eng gefasst.">🎓 Abschlussbasiert</span>' : '';
+    const firma = firmenData.find(f => f.name.toLowerCase() === j.company.toLowerCase());
+    const fallbackLink = firma && firma.portal !== j.link
+      ? '<a class="apply-btn-fallback" href="' + firma.portal + '" target="_blank">🏢 Firmen-Karriereseite</a>'
+      : '';
     const tr = document.createElement('tr');
     tr.innerHTML =
-      '<td><strong>' + escapeHtml(j.title) + '</strong>' + neu + '</td>' +
+      '<td><strong>' + escapeHtml(j.title) + '</strong>' + neu + linkWarningBadge + herkunftBadge + '</td>' +
       '<td><div class="cell-company"><div class="company-logo">' + logoInitials(j.company) + '</div>' + escapeHtml(j.company) + vermittlerBadge + '</div></td>' +
       '<td>' + escapeHtml(j.ort) + '</td>' +
       '<td>' + brancheBadge(j.branche) + '</td>' +
@@ -1403,7 +1473,7 @@ function renderJobs(data) {
       '<td>' + escapeHtml(j.veroeffentlicht) + '</td>' +
       '<td>' + starsHTML(ms) + '</td>' +
       '<td style="max-width:260px;font-size:0.78rem;color:var(--muted);">' + escapeHtml(j.anforderungen) + '</td>' +
-      '<td><a class="apply-btn" href="' + j.link + '" target="_blank">Jetzt bewerben →</a></td>';
+      '<td><div class="apply-btn-group"><a class="apply-btn" href="' + j.link + '" target="_blank">Jetzt bewerben →</a>' + fallbackLink + '</div></td>';
     tbody.appendChild(tr);
   });
   document.getElementById('jobs-no-results').style.display = data.length === 0 ? 'block' : 'none';
@@ -1424,9 +1494,11 @@ function renderTracker() {
     if (activeTrackerFilter && state.status !== activeTrackerFilter) return;
     shown++;
     const trackerVermittlerBadge = j.vermittler ? ' <span class="vermittler-badge" title="Vermittelt durch Personalberatung/Headhunter – der tatsächliche Arbeitgeber wird in dieser Anzeige nicht genannt">🕵️</span>' : '';
+    const trackerLinkWarningBadge = j.linkOffline ? ' <span class="link-warning-badge" title="Diese Stellenanzeige konnte beim letzten Check nicht mehr geöffnet werden und ist ggf. bereits offline. Bitte über die Firmen-Karriereseite prüfen, ob die Stelle noch existiert.">⚠️</span>' : '';
+    const trackerHerkunftBadge = j.herkunft === 'abschlussbasiert' ? ' <span class="herkunft-badge" title="Gefunden über eine breite, abschlussbasierte Suche (M.Sc. Maschinenbau o. ä.), nicht über eine der spezialisierten Zielrollen.">🎓</span>' : '';
     const tr = document.createElement('tr');
     tr.innerHTML =
-      '<td><strong>' + escapeHtml(j.title) + '</strong></td>' +
+      '<td><strong>' + escapeHtml(j.title) + '</strong>' + trackerLinkWarningBadge + trackerHerkunftBadge + '</td>' +
       '<td>' + escapeHtml(j.company) + trackerVermittlerBadge + '</td>' +
       '<td>' + escapeHtml(j.ort) + '</td>' +
       '<td>' + starsHTML(getJobMatch(j)) + '</td>' +
@@ -1486,6 +1558,72 @@ function renderLinkedIn() {
   if (tipCo && PROFILE.linkedinCompaniesTipp) tipCo.innerHTML = PROFILE.linkedinCompaniesTipp;
 }
 
+// ===== RENDER: HERLEITUNG (CV -> Suchprofil -> Recherche) =====
+function renderHerleitung() {
+  const cvWrap = document.getElementById('herleitung-cv-cards');
+  const spWrap = document.getElementById('herleitung-suchprofil-cards');
+  const brWrap = document.getElementById('herleitung-branchen-cards');
+  const stepsWrap = document.getElementById('herleitung-steps-list');
+  const statsWrap = document.getElementById('herleitung-result-stats');
+  const emptyMsg = document.getElementById('herleitung-empty');
+  if (!cvWrap) return;
+
+  const hasData = herleitungData && (
+    (herleitungData.cvFakten && herleitungData.cvFakten.length) ||
+    (herleitungData.suchprofil && herleitungData.suchprofil.length)
+  );
+  emptyMsg.style.display = hasData ? 'none' : 'block';
+  if (!hasData) {
+    cvWrap.innerHTML = ''; spWrap.innerHTML = ''; brWrap.innerHTML = ''; stepsWrap.innerHTML = ''; statsWrap.innerHTML = '';
+    return;
+  }
+
+  cvWrap.innerHTML = (herleitungData.cvFakten || []).map(k =>
+    '<div class="herleitung-card"><h4>' + escapeHtml(k.kategorie) + '</h4><ul>' +
+    (k.punkte || []).map(p => '<li>' + escapeHtml(p) + '</li>').join('') + '</ul></div>'
+  ).join('');
+
+  spWrap.innerHTML = (herleitungData.suchprofil || []).map(d =>
+    '<div class="herleitung-card"><h4>' + escapeHtml(d.dimension) + '</h4><div>' +
+    (d.werte || []).map(w => '<span class="herleitung-chip herleitung-chip-static">' + escapeHtml(w) + '</span>').join('') +
+    '</div>' + (d.begruendung ? '<div class="herleitung-begruendung">' + escapeHtml(d.begruendung) + '</div>' : '') + '</div>'
+  ).join('');
+
+  statsWrap.innerHTML =
+    '<div class="stat-card"><div class="number">' + firmenData.length + '</div><div class="label">Firmen recherchiert</div></div>' +
+    '<div class="stat-card"><div class="number">' + jobsData.length + '</div><div class="label">Stellen gefunden</div></div>' +
+    '<div class="stat-card"><div class="number">' + linkedinQueries.length + '</div><div class="label">LinkedIn-Suchprofile</div></div>';
+
+  const branchenDim = (herleitungData.suchprofil || []).find(d => /branche/i.test(d.dimension));
+  const branchen = branchenDim && branchenDim.werte && branchenDim.werte.length
+    ? branchenDim.werte
+    : [...new Set(firmenData.map(f => f.branche))].sort();
+
+  brWrap.innerHTML = branchen.map(b => {
+    const fCount = firmenData.filter(f => f.branche === b).length;
+    const jCount = jobsData.filter(j => j.branche === b).length;
+    const safeB = b.replace(/'/g, "\\'");
+    return '<div class="herleitung-card">' +
+      '<h4>' + escapeHtml(b) + '</h4>' +
+      '<span class="herleitung-chip" onclick="jumpToBranche(\'firmen\',\'' + safeB + '\')">🏢 ' + fCount + ' Firmen ansehen</span>' +
+      '<span class="herleitung-chip" onclick="jumpToBranche(\'jobs\',\'' + safeB + '\')">📋 ' + jCount + ' Stellen ansehen</span>' +
+      '</div>';
+  }).join('');
+
+  stepsWrap.innerHTML = (herleitungData.rechercheSchritte || []).map(s => '<li style="margin-bottom:6px;">' + escapeHtml(s) + '</li>').join('');
+}
+
+function jumpToBranche(tab, branche) {
+  switchTab(tab);
+  if (tab === 'firmen') {
+    const sel = document.getElementById('f-branche');
+    if (sel) { sel.value = branche; filterFirmen(); }
+  } else if (tab === 'jobs') {
+    const sel = document.getElementById('f-job-branche');
+    if (sel) { sel.value = branche; filterJobs(); }
+  }
+}
+
 // ===== HEADER & DROPDOWNS =====
 function initHeader() {
   document.getElementById('header-title').textContent = '🎯 Job-Dashboard – ' + PROFILE.name;
@@ -1530,7 +1668,7 @@ function quickFilterJobs(type) {
     activeJobQuickFilter = null; updateJobStatCardActive(); renderJobs(jobsData); return;
   }
   activeJobQuickFilter = type;
-  ['f-job-search','f-job-branche','f-job-land','f-job-remote','f-job-match','f-job-sprache','f-job-level'].forEach(id => {
+  ['f-job-search','f-job-branche','f-job-land','f-job-remote','f-job-match','f-job-sprache','f-job-level','f-job-herkunft'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
   });
   let filtered;
@@ -1610,6 +1748,7 @@ function filterJobs() {
   const match   = parseInt(document.getElementById('f-job-match').value) || 0;
   const sprache = document.getElementById('f-job-sprache').value;
   const level   = document.getElementById('f-job-level').value;
+  const herkunft = document.getElementById('f-job-herkunft').value;
   const filtered = jobsData.filter(j => {
     if (search  && !(j.title + j.company + j.ort).toLowerCase().includes(search)) return false;
     if (branche && j.branche !== branche) return false;
@@ -1618,6 +1757,7 @@ function filterJobs() {
     if (match   && getJobMatch(j) < match) return false;
     if (sprache && j.sprache !== sprache) return false;
     if (level   && j.level !== level) return false;
+    if (herkunft && (j.herkunft || 'rollenspezifisch') !== herkunft) return false;
     return true;
   });
   renderJobs(filtered);
@@ -1625,7 +1765,7 @@ function filterJobs() {
 
 function resetJobFilter() {
   activeJobQuickFilter = null; updateJobStatCardActive();
-  ['f-job-search','f-job-branche','f-job-land','f-job-remote','f-job-match','f-job-sprache','f-job-level'].forEach(id => {
+  ['f-job-search','f-job-branche','f-job-land','f-job-remote','f-job-match','f-job-sprache','f-job-level','f-job-herkunft'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
   });
   renderJobs(jobsData);
@@ -1636,10 +1776,11 @@ function switchTab(name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
-  ['firmen','jobs','tracker','linkedin'].forEach((t, i) => {
+  ['firmen','jobs','tracker','linkedin','herleitung'].forEach((t, i) => {
     if (t === name) document.querySelectorAll('.tab')[i].classList.add('active');
   });
   if (name === 'tracker') renderTracker();
+  if (name === 'herleitung') renderHerleitung();
 }
 
 // ===== SORTIERUNG =====
@@ -1793,6 +1934,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (topCount) topCount.textContent = firmenData.filter(f => getFirmaMatch(f) === 5).length;
   renderJobs(jobsData);
   renderLinkedIn();
+  renderHerleitung();
   loadTrackerState();
   updateTrackerStats();
   bootstrapTrackerFromRepo();
