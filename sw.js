@@ -1,6 +1,7 @@
-﻿const CACHE_NAME = 'jobs-ulf-v1';
+﻿const CACHE_NAME = 'jobs-ulf-v2-24092026';
 const ASSETS = [
   './ulf_jobs_dashboard.html',
+  './ulf_suchradius.html',
   './manifest.json',
   './icon.svg'
 ];

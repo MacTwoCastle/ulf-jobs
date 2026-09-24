@@ -175,6 +175,7 @@
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
     <span class="badge" id="header-status"></span>
     <span id="stand-datum" style="background:#254d78;color:#fff;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;"></span>
+    <a id="scope-link" href="#" style="display:none;background:#254d78;color:#fff;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;text-decoration:none;">🔎 Suchradius</a>
   </div>
 </div>
 
@@ -456,7 +457,7 @@ const PROFILE = {
   "slug": "ulf",
   "subtitle": "Dipl.-Ökonom · CIO / IT-Leiter · 30 Jahre IT-Management · Cloud · ITIL · AI · Heidelberg",
   "searchStatus": "Jobsuche aktiv",
-  "standDatum": "30.08.2026",
+  "standDatum": "24.09.2026",
   "skills": [
     "CIO",
     "IT-Leiter",
@@ -513,7 +514,7 @@ const PROFILE = {
     "Schweiz"
   ],
   "firmenInfobox": "<strong>Profil-Matching:</strong> Aufgelistet sind Unternehmen im DACH-Raum, die eine erfahrene <strong>CIO- / IT-Leiter-Persönlichkeit</strong> mit ausgewiesenem Hintergrund in <strong>IT-Transformation, Cloud, ITIL, IT-Security (DORA / ISO 27001), SAP, Outsourcing und KI-Transformation</strong> suchen – passend zu Ulfs 30 Jahren IT-Management-Erfahrung bei T-Systems, DLR PT und MLP sowie dem AI-Executive-Programme (Oxford) und dem KI-Beauftragten-Zertifikat (DEKRA).",
-  "jobsInfobox": "<strong>Quellen:</strong> LinkedIn, Indeed, XING, Unternehmens-Karriereseiten – recherchiert am 30.08.2026. Klicke auf <em>Jetzt bewerben</em> für den direkten Link zur Stellenanzeige.",
+  "jobsInfobox": "<strong>Quellen:</strong> LinkedIn, Indeed, XING, Unternehmens-Karriereseiten – recherchiert am 24.09.2026. Klicke auf <em>Jetzt bewerben</em> für den direkten Link zur Stellenanzeige.",
   "linkedinKeywordsTipp": "Empfohlene Keywords: <em>CIO, IT-Leiter, IT-Direktor, Head of IT, VP IT, IT-Transformation, Digital Transformation, Bereichsleiter IT, CISO, KI-Beauftragter, Head of AI, Director IT Service Management</em>",
   "linkedinCompaniesTipp": "Profile von Firmen wie <strong>IBM, Capgemini, Accenture, T-Systems, Deutsche Bank, Allianz, Deloitte, KPMG, BSI, Dataport, msg Group</strong> direkt folgen"
 };
@@ -1072,6 +1073,51 @@ const firmenData = [
     "portal": "https://www.signal-iduna.de/karriere",
     "groesse": "gross",
     "beschreibung": "Versicherer Head of Information Security IT-Security-Governance Compliance – aktuell offene Stelle in Hamburg"
+  },
+  {
+    "name": "Union Investment (Union Asset Management Holding AG)",
+    "branche": "Finanzwirtschaft",
+    "land": "Deutschland",
+    "laender": [
+      "Deutschland"
+    ],
+    "ma": 6000,
+    "ma_label": "~6.000",
+    "umsatz": "n.a. (Genossenschaftliche Fondsgesellschaft)",
+    "match": 4,
+    "portal": "https://karriere.union-investment.de/",
+    "groesse": "gross",
+    "beschreibung": "Fondsgesellschaft Information Security Office ICT-Risk DORA BaFin Compliance – aktuell offene CISO-nahe Stelle in Frankfurt"
+  },
+  {
+    "name": "TXLOGISTIK",
+    "branche": "Logistik",
+    "land": "Deutschland",
+    "laender": [
+      "Deutschland"
+    ],
+    "ma": 700,
+    "ma_label": "~700",
+    "umsatz": "n.a.",
+    "match": 4,
+    "portal": "https://www.txlogistik.eu/de/karriere",
+    "groesse": "mittel",
+    "beschreibung": "Bahnlogistikunternehmen CISO-Rolle IT-Security-Governance – aktuell offene Stelle in Troisdorf"
+  },
+  {
+    "name": "Universitätsklinikum Ulm",
+    "branche": "Gesundheitswesen",
+    "land": "Deutschland",
+    "laender": [
+      "Deutschland"
+    ],
+    "ma": 8000,
+    "ma_label": "~8.000",
+    "umsatz": "n.a. (Universitätsklinikum)",
+    "match": 3,
+    "portal": "https://www.stepstone.de/stellenangebote--Chief-Information-Security-Officer-CISO-Informationssicherheitsbeauftragter-m-w-d-Ulm-Universitaetsklinikum-Ulm--14515961-inline.html",
+    "groesse": "gross",
+    "beschreibung": "Universitätsklinikum CISO/Informationssicherheitsbeauftragter IT-Security-Governance Gesundheitswesen – aktuell offene Stelle in Ulm"
   }
 ];
 const jobsData = [
@@ -1083,13 +1129,14 @@ const jobsData = [
     "branche": "Medizintechnik",
     "remote": "Hybrid",
     "sprache": "Deutsch",
-    "veroeffentlicht": "weiterhin ausgeschrieben (am 30.08.2026 geprüft)",
+    "veroeffentlicht": "auf Indeed abgelaufen (am 24.09.2026 geprüft, aktuell keine IT-Leitungsstelle in Geuders eigener Jobliste)",
     "alter_tage": 47,
     "match": 5,
     "level": "Executive",
     "anforderungen": "IT-Führung; IT- und Infrastrukturprojekte inkl. Cloud (Microsoft 365, Azure); Koordination mit Head of Digital Transformation; Medizintechnikunternehmen; direkt in Heidelberg",
     "link": "https://de.indeed.com/viewjob?jk=7b591a5a9421d32f",
-    "quelle": "Indeed"
+    "quelle": "Indeed",
+    "linkOffline": true
   },
   {
     "title": "Leiter IT | Schwerpunkt IT-Infrastruktur, IT-Security, Compliance | Inhouse",
@@ -1488,6 +1535,70 @@ const jobsData = [
     "anforderungen": "Gesamtverantwortung globale IT-Strategie und digitale Transformation; SAP-Transformationen; Cloud-Strategie; internationale produzierende Unternehmensgruppe; sehr aktuell veröffentlicht; Executive-Search-Vermittlung",
     "link": "https://www.xing.com/jobs/siegen-leiter-it-international-transformation-digitalisierung-cloud-strategie-sap-produktion-mwd-157067079",
     "quelle": "XING"
+  },
+  {
+    "title": "Gruppenleiter*in / CISO Information Security Office & ICT-Risk",
+    "company": "Union Investment",
+    "ort": "Frankfurt am Main, Deutschland",
+    "land": "Deutschland",
+    "branche": "Finanzwirtschaft",
+    "remote": "Hybrid",
+    "sprache": "Deutsch",
+    "veroeffentlicht": "vor 2 Wochen",
+    "alter_tage": 14,
+    "match": 4,
+    "level": "Executive",
+    "anforderungen": "Führung Information Security Office & ICT-Risk; Fondsgesellschaft; DORA/BaFin-Umfeld; direkter Arbeitgeber, passt zu Ulfs Security-Governance- und DORA-Erfahrung aus dem MLP-Hintergrund",
+    "link": "https://www.stepstone.de/stellenangebote--Gruppenleiterin-CISO-Information-Security-Office-ICT-Risk-Frankfurt-am-Main-Union-Investment--14491258-inline.html",
+    "quelle": "StepStone"
+  },
+  {
+    "title": "Chief Information Security Officer (CISO)",
+    "company": "TXLOGISTIK",
+    "ort": "Troisdorf, Deutschland",
+    "land": "Deutschland",
+    "branche": "Logistik",
+    "remote": "Hybrid",
+    "sprache": "Deutsch",
+    "veroeffentlicht": "vor 1 Woche",
+    "alter_tage": 7,
+    "match": 4,
+    "level": "Executive",
+    "anforderungen": "CISO-Rolle bei Bahnlogistik-Unternehmen; IT-Security-Governance; direkter Arbeitgeber",
+    "link": "https://www.stepstone.de/stellenangebote--Chief-Information-Security-Officer-CISO-Troisdorf-TXLOGISTIK--14399905-inline.html",
+    "quelle": "StepStone"
+  },
+  {
+    "title": "Chief Information Security Officer (m/f/d)",
+    "company": "Symrise AG",
+    "ort": "Holzminden, Deutschland",
+    "land": "Deutschland",
+    "branche": "Industrie",
+    "remote": "nicht angegeben",
+    "sprache": "Deutsch",
+    "veroeffentlicht": "vor 3 Tagen",
+    "alter_tage": 3,
+    "match": 3,
+    "level": "Executive",
+    "anforderungen": "CISO-Rolle bei internationalem Duft-/Aromenhersteller; IT-Security-Governance; direkter Arbeitgeber",
+    "link": "https://www.stepstone.de/stellenangebote--Chief-Information-Security-Officer-m-f-d-Holzminden-Symrise-AG--14418106-inline.html",
+    "quelle": "StepStone"
+  },
+  {
+    "title": "Chief Information Security Officer (CISO) / Informationssicherheitsbeauftragter (m/w/d)",
+    "company": "Universitätsklinikum Ulm",
+    "ort": "Ulm, Deutschland",
+    "land": "Deutschland",
+    "branche": "Gesundheitswesen",
+    "remote": "Hybrid",
+    "sprache": "Deutsch",
+    "veroeffentlicht": "vor 1 Woche",
+    "alter_tage": 7,
+    "match": 3,
+    "level": "Executive",
+    "anforderungen": "CISO/Informationssicherheitsbeauftragter im Klinikum; IT-Security-Governance und Compliance im Gesundheitswesen; direkter Arbeitgeber",
+    "link": "https://www.stepstone.de/stellenangebote--Chief-Information-Security-Officer-CISO-Informationssicherheitsbeauftragter-m-w-d-Ulm-Universitaetsklinikum-Ulm--14515961-inline.html",
+    "quelle": "StepStone"
   }
 ];
 const linkedinQueries = [
@@ -1679,6 +1790,7 @@ const herleitungData = {
     "Update 30.08.2026: Originalquellen erneut geprüft. Die IT-Leitung bei Geuder AG (Heidelberg) und die Head-of-Information-Security-Rolle bei SIGNAL IDUNA (Hamburg oder Dortmund) sind weiterhin erreichbar. Die zuvor verlinkten XING-Anzeigen bei Encevo Deutschland und JUMO antworten mit HTTP 410; beide Einträge bleiben als strategische Referenz mit Offline-Hinweis erhalten. Medizintechnik ist wegen der verifizierten Geuder-Rolle als Zielbranche ergänzt; die LinkedIn-Suche wurde dafür auf den Raum Rhein-Neckar erweitert."
   ]
 };
+const HAS_SUCHRADIUS = true;
 // ===== END DATA SECTION =====
 
 
@@ -2011,6 +2123,11 @@ function initHeader() {
   if (metaTitle) metaTitle.content = 'Jobs – ' + PROFILE.name.split(' ')[0];
   if (PROFILE.firmenInfobox) document.getElementById('firmen-infobox').innerHTML = PROFILE.firmenInfobox;
   if (PROFILE.jobsInfobox)   document.getElementById('jobs-infobox').innerHTML   = PROFILE.jobsInfobox;
+  if (typeof HAS_SUCHRADIUS !== 'undefined' && HAS_SUCHRADIUS && PROFILE.slug) {
+    const scopeLink = document.getElementById('scope-link');
+    scopeLink.href = PROFILE.slug + '_suchradius.html';
+    scopeLink.style.display = 'inline-block';
+  }
 }
 
 function initFilterDropdowns() {
