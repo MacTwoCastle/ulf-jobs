@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = 'jobs-ulf-v2-24092026';
+﻿const CACHE_NAME = 'jobs-ulf-v2-26102026';
 const ASSETS = [
   './ulf_jobs_dashboard.html',
   './ulf_suchradius.html',
